@@ -1,0 +1,14 @@
+node_modules
+node_modules
+
+# Laravel
+/vendor
+/.env
+/storage/*.key
+
+# Node
+/node_modules
+/dist
+
+# MacOS
+.DS_Store
