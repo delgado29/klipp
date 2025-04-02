@@ -1,8 +1,7 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 
 <template>
     <div>
-      <h2>Login Page</h2>
+      <h2>Register Page</h2>
     </div>
   </template>
   

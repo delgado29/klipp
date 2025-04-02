@@ -8,19 +8,19 @@ import AdminDashboard from '../views/admin/AdminDashboard.vue'
 import EmployeeDashboard from '../views/employee/EmployeeDashboard.vue'
 import ClientDashboard from '../views/client/ClientDashboard.vue'
 
-import Login from '../views/auth/Login.vue'
-import Register from '../views/auth/Register.vue'
+import LoginPage from '../views/auth/LoginPage.vue'
+import RegisterPage from '../views/auth/RegisterPage.vue'
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: LoginPage
   },
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: RegisterPage
   },
   {
     path: '/admin',
