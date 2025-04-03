@@ -1,11 +1,14 @@
 <template>
-    <div>
-      <h2>Admin Dashboard</h2>
-    </div>
-  </template>
+  <div>
   
-  <script setup>
-  </script>
-  
-  <style scoped>
-  </style>
+  </div>
+</template>
+
+<script setup>
+import { useUserStore } from '@/store/user'
+const userStore = useUserStore()
+
+// Check if the user is authenticated when the component is created
+userStore.checkAuth()
+
+</script>

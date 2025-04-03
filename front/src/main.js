@@ -5,7 +5,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://localhost:8000'
+axios.defaults.baseURL = 'http://127.0.0.1:8000' //en lugar de localhost
 axios.defaults.withCredentials = true
 
 

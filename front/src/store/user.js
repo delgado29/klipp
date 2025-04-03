@@ -15,9 +15,32 @@ export const useUserStore = defineStore('user', {
       this.isAuthenticated = true
     },
 
-    logout() {
-      this.user = null
-      this.isAuthenticated = false
+    async logout() {
+      if (!this.user) {
+        this.isAuthenticated = false
+        return
+      }
+    
+      try {
+        await axios.post('/api/logout', {}, { withCredentials: true })
+        this.user = null
+        this.isAuthenticated = false
+    
+        // Redirigir al login
+        window.location.href = '/login'
+      } catch (error) {
+        console.error('Error during logout:', error)
+      }
+    },
+
+    //estoy autenticado?
+    async checkAuth() {
+      try {
+        const response = await axios.get('/api/user', { withCredentials: true })
+        console.log('✅ Usuario autenticado:', response.data)
+      } catch (error) {
+        console.error('❌ No estás autenticado:', error.response?.status, error.response?.data)
+      }
     },
 
     getRoleRedirectPath() {
@@ -25,15 +48,16 @@ export const useUserStore = defineStore('user', {
 
       switch (this.user.role.name) {
         case 'admin':
-          return '/admin/dashboard'
+          return '/admin'
         case 'employee':
-          return '/employee/dashboard'
+          return '/employee'
         case 'client':
-          return '/client/dashboard'
+          return '/client'
         default:
           return '/login'
       }
     },
+    
   },
   persist: true,
 })

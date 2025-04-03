@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
       this.loading = true
       this.error = null
       try {
-        const response = await axios.post('http://localhost:8000/api/login', credentials, {
+        const response = await axios.post('http://127.0.0.1:8000/api/login', credentials, {
           withCredentials: true
         })
 
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
 
     async logout() {
       try {
-        await axios.post('http://localhost:8000/api/logout', {}, { withCredentials: true })
+        await axios.post('http://127.0.0.1:8000/api/logout', {}, { withCredentials: true })
       } catch (err) {
         // Ignore
       }
@@ -43,7 +43,7 @@ export const useAuthStore = defineStore('auth', {
 
     async fetchUser() {
       try {
-        const response = await axios.get('http://localhost:8000/api/user', {
+        const response = await axios.get('http://127.0.0.1:8000/api/user', {
           withCredentials: true
         })
         this.user = response.data
