@@ -10,17 +10,28 @@ import ClientDashboard from '../views/client/ClientDashboard.vue'
 
 import LoginPage from '../views/auth/LoginPage.vue'
 import RegisterPage from '../views/auth/RegisterPage.vue'
+import GuestHomePage from '@/views/guest/GuestHomePage.vue'
+
 
 const routes = [
+  
+  {
+    path: '/',
+    name: 'GuestHome',
+    component: GuestHomePage,
+    meta: { requiresGuest: true }
+  },
   {
     path: '/login',
     name: 'Login',
-    component: LoginPage
+    component: LoginPage,
+    meta: { requiresGuest: true }
   },
   {
     path: '/register',
     name: 'Register',
-    component: RegisterPage
+    component: RegisterPage,
+    meta: { requiresGuest: true }
   },
   {
     path: '/admin',
