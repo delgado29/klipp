@@ -53,4 +53,13 @@ class ServiceController extends Controller
 
         return response()->json(null, 204);
     }
+    public function getByBusiness($id)
+    {
+        return response()->json(
+            Service::where('business_id', $id)->get()
+        );
+    }
+
 }
+
+    

@@ -5,41 +5,42 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     user: null,
     isAuthenticated: false,
+    token: null
   }),
 
   actions: {
     async login(credentials) {
-      await axios.get('/sanctum/csrf-cookie')
+      console.log('Login credentials:', credentials)
       const response = await axios.post('/api/login', credentials)
+      console.log('Login response:', response.data)
       this.user = response.data.user
+      this.token = response.data.token
       this.isAuthenticated = true
     },
 
     async logout() {
-      if (!this.user) {
-        this.isAuthenticated = false
-        return
-      }
-    
-      try {
-        await axios.post('/api/logout', {}, { withCredentials: true })
-        this.user = null
-        this.isAuthenticated = false
-    
-        // Redirigir al login
-        window.location.href = '/login'
-      } catch (error) {
-        console.error('Error during logout:', error)
-      }
+      this.user = null
+      this.token = null
+      this.isAuthenticated = false
+      window.location.href = '/'
     },
 
     //estoy autenticado?
     async checkAuth() {
       try {
-        const response = await axios.get('/api/user', { withCredentials: true })
+        const response = await axios.get('/api/user', {
+          headers: {
+            Authorization: `Bearer ${this.token}`
+          }
+        })
+        this.user = response.data
+        this.isAuthenticated = true
         console.log('✅ Usuario autenticado:', response.data)
       } catch (error) {
         console.error('❌ No estás autenticado:', error.response?.status, error.response?.data)
+        this.user = null
+        this.token = null
+        this.isAuthenticated = false
       }
     },
 

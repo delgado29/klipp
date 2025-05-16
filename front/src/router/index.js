@@ -1,8 +1,6 @@
+import { useUserStore } from '@/store/user'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import AdminLayout from '../layouts/AdminLayout.vue'
-import EmployeeLayout from '../layouts/EmployeeLayout.vue'
-import ClientLayout from '../layouts/ClientLayout.vue'
 
 import AdminDashboard from '../views/admin/AdminDashboard.vue'
 import EmployeeDashboard from '../views/employee/EmployeeDashboard.vue'
@@ -35,42 +33,74 @@ const routes = [
   },
   {
     path: '/admin',
-    component: AdminLayout,
-    children: [
-      {
-        path: '',
-        name: 'AdminDashboard',
-        component: AdminDashboard
-      }
-    ]
+    name: 'AdminDashboard',
+    component: AdminDashboard
   },
   {
     path: '/employee',
-    component: EmployeeLayout,
-    children: [
-      {
-        path: '',
-        name: 'EmployeeDashboard',
-        component: EmployeeDashboard
-      }
-    ]
+    name: 'EmployeeDashboard',
+    component: EmployeeDashboard
   },
   {
     path: '/client',
-    component: ClientLayout,
-    children: [
-      {
-        path: '',
-        name: 'ClientDashboard',
-        component: ClientDashboard
-      }
-    ]
+    name: 'ClientDashboard',
+    component: ClientDashboard
+  },
+  {
+    path: '/business/:id/book',
+    name: 'BusinessBooking',
+    component: () => import('@/views/booking/BusinessBooking.vue'),
+    props: true
+  },
+  {
+    path: '/terms',
+    name: 'Terms',
+    component: () => import('@/views/TermsPage.vue') 
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: () => import('@/views/PrivacyPage.vue')
+  },
+  {
+    path: '/help',
+    name: 'Help',
+    component: () => import('@/views/HelpPage.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+
+  const protectedPrefixes = {
+    '/admin': 'admin',
+    '/employee': 'employee',
+    '/client': 'client'
+  }
+
+  const currentPrefix = '/' + to.path.split('/')[1] || '/'
+  const expectedRole = protectedPrefixes[currentPrefix]
+
+  if (expectedRole) {
+    if (!userStore.isAuthenticated) {
+      return next({ name: 'Login' })
+    }
+    if (userStore.user?.role?.name !== expectedRole) {
+      return next({ name: 'Login' })
+    }
+  }
+
+  if (to.meta.requiresGuest && userStore.isAuthenticated && userStore.user?.role?.name) {
+    return next(userStore.getRoleRedirectPath())
+  }
+
+  next()
 })
 
 export default router
